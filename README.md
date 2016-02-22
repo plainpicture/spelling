@@ -40,7 +40,7 @@ Request:
 Response:
 
 ```json
-{"query":keyword 1","distance":2,"took":6}
+{"query":"keyword 1","distance":2,"took":6}
 ```
 
 `took` tells you how long the response took.
