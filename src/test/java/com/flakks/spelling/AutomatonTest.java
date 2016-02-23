@@ -22,20 +22,20 @@ public class AutomatonTest extends TestCase {
     	assertEquals(-1, automaton.minFrequency);
     }
     
-    public void testSuggestDistance() {
+    public void testCorrectDistance() {
     	TrieNode root = new TrieNode();
     	root.insert("first", 1);
     	root.insert("second", 1);
     	
-    	assertEquals("first", new Automaton("fist", 2).suggest(root).token);
-    	assertEquals("second", new Automaton("secnd", 2).suggest(root).token);
+    	assertEquals("first", new Automaton("fist", 2).correct(root).token);
+    	assertEquals("second", new Automaton("secnd", 2).correct(root).token);
     }
     
-    public void testSuggestFrequency() {
+    public void testCorrectFrequency() {
     	TrieNode root = new TrieNode();
     	root.insert("word 1", 1);
     	root.insert("word 2", 2);
     	
-    	assertEquals("word 2", new Automaton("word", 2).suggest(root).token);
+    	assertEquals("word 2", new Automaton("word", 2).correct(root).token);
     }
 }

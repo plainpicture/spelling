@@ -25,13 +25,13 @@ public class SpellingQueryMapper extends QueryMapper {
 		if(dictionary.containsKey(str))
 			return str;
 		
-		Suggestion suggestion = new Automaton(str, str.length() > 4 ? 2 : 1).suggest(trieNode);
+		Correction correction = new Automaton(str, str.length() > 4 ? 2 : 1).correct(trieNode);
 			
-		if(suggestion == null)
+		if(correction == null)
 			return null;
 		
-		sumDistance += suggestion.distance;
+		sumDistance += correction.distance;
 		
-		return suggestion.token;
+		return correction.token;
 	}
 }

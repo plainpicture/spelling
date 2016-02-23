@@ -1,18 +1,18 @@
 
 package com.flakks.spelling;
 
-public class Suggestion implements Comparable<Suggestion> {
+public class Correction implements Comparable<Correction> {
 	public String token;
 	public int distance;
 	public int frequency;
 	
-	public Suggestion(String token, int distance, int frequency) {
+	public Correction(String token, int distance, int frequency) {
 		this.token = token;
 		this.distance = distance;
 		this.frequency = frequency;
 	}
 	
-	public int compareTo(Suggestion suggestion) {		
+	public int compareTo(Correction suggestion) {		
 		if(distance < suggestion.distance)
 			return -1;
 		

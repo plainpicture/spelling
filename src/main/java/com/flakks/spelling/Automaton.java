@@ -74,11 +74,11 @@ public class Automaton {
 			(node.minLength - string.length() <= maxEdits && string.length() - node.maxLength <= maxEdits && minFrequency < node.maxFrequency));
 	}
 
-	public Suggestion suggest(TrieNode node) {
-		return suggestRecursive(node, start(), null);
+	public Correction correct(TrieNode node) {
+		return correctRecursive(node, start(), null);
 	}
 	
-	private Suggestion suggestRecursive(TrieNode node, State state, Suggestion suggestion) {
+	private Correction correctRecursive(TrieNode node, State state, Correction correction) {
 		for(Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
 			Character c = entry.getKey();
 			TrieNode newNode = entry.getValue();
@@ -86,59 +86,25 @@ public class Automaton {
 			State newState = step(state, c);
 			
 			if(newNode.word != null && isMatch(newState)) {
-				Suggestion newSuggestion = new Suggestion(newNode.word, newState.values.get(newState.values.size() - 1), newNode.frequency);
+				Correction newSuggestion = new Correction(newNode.word, newState.values.get(newState.values.size() - 1), newNode.frequency);
 				
-				if(suggestion == null) {
-					this.maxEdits = newSuggestion.distance;
-					this.minFrequency = newSuggestion.frequency;
+				if(correction == null) {
+					maxEdits = newSuggestion.distance;
+					minFrequency = newSuggestion.frequency;
 					
-					suggestion = newSuggestion;
-				} else if(newSuggestion.compareTo(suggestion) == -1) {
-					this.maxEdits = Math.min(this.maxEdits, newSuggestion.distance);
-					this.minFrequency = Math.max(this.minFrequency, newSuggestion.frequency);
+					correction = newSuggestion;
+				} else if(newSuggestion.compareTo(correction) == -1) {
+					maxEdits = Math.min(maxEdits, newSuggestion.distance);
+					minFrequency = Math.max(minFrequency, newSuggestion.frequency);
 					
-					suggestion = newSuggestion;
+					correction = newSuggestion;
 				}
 			}
 			
 			if(canMatch(newState, newNode))
-				suggestion = suggestRecursive(newNode, newState, suggestion);
+				correction = correctRecursive(newNode, newState, correction);
 		}
 
-		return suggestion;
+		return correction;
 	}
-	
-	/*
-	public boolean canMatch(State state) {
-		return state.indices.size() > 0;
-	}
-	
-	public List<Suggestion> suggest(TrieNode node) {
-		State state = start();
-		List<Suggestion> suggestions = new ArrayList<Suggestion>();
-		
-		suggestRecursive(node, state, suggestions, maxEdits);
-		
-		return suggestions;
-	}
-	
-	private void suggestRecursive(TrieNode node, State state, List<Suggestion> suggestions, int maxEdits) {
-		for(Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
-			Character c = entry.getKey();
-			TrieNode newNode = entry.getValue();
-			
-			State newState = step(state, c);
-			
-			if(newNode.word != null && isMatch(newState)) {
-				maxEdits = Math.min(maxEdits, newState.values.get(newState.values.size() - 1));
-				
-				suggestions.add(new Suggestion(newNode.word, newState.values.get(newState.values.size() - 1), newNode.frequency));
-			}
-			
-			//if(canMatch(newState) && newNode.minLength - string.length() <= maxEdits && string.length() - newNode.maxLength <= maxEdits)
-			if(canMatch(newState))
-				suggestRecursive(newNode, newState, suggestions, maxEdits);
-		}
-	}
-	*/
 }

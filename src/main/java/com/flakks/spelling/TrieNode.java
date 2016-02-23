@@ -2,6 +2,7 @@
 package com.flakks.spelling;
 
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.HashMap;
 
 public class TrieNode {
@@ -30,11 +31,7 @@ public class TrieNode {
 			else
 				node.minLength = Math.min(node.minLength, word.length());
 
-			if(node.maxLength == -1)
-				node.maxLength = word.length();
-			else
-				node.maxLength = Math.max(node.maxLength,  word.length());
-			
+			node.maxLength = Math.max(node.maxLength,  word.length());
 			node.maxFrequency = Math.max(node.maxFrequency, frequency);
 
 			if(i < word.length()) {
