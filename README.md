@@ -14,7 +14,7 @@ $ mvn clean install
 Run:
 
 ```
-$ java -jar target/spelling-0.0.1-jar-with-dependencies.jar /path/to/dictionary.txt
+$ java -jar target/spelling-0.0.1-jar-with-dependencies.jar /path/to/dictionary1.txt /path/to/dictionary2.txt ...
 ```
 
 The dictionary file is a simple tab separated list:

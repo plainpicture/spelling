@@ -23,30 +23,24 @@ public abstract class CorrectionLookup implements QueryLookup {
 		String resultString = null;
 		int resultOffset = -1;
 		int distance = -1;
-		int partialDistance = -1;
+		int realDistance = -1;
 		int frequency = 0;
 		
 		for(int k = 1; k <= maxK; k++) {
 			String currentResult = null;
 			int currentDistance = 0;
-			int currentPartialDistance = 0;
+			int currentReallDistance = 0;
 			int currentFrequency = 0;
 			
 			for(int i = offset; i < maxOffset; i += k) {
 				String lookupString = StringHelper.sliceJoin(" ", tokens, i, Math.min(Math.min(i + k, tokens.size()), maxOffset));
 				
-				Correction correction = null;
-				
-				if(lookupString.length() > 3) {
-					correction = cache.get(lookupString);
+				Correction correction = cache.get(lookupString);
 					
-					if(correction == null) {
-						correction = correct(lookupString, lookupString.length() > 4 ? 2 : 1);
+				if(correction == null) {
+					correction = correct(lookupString, lookupString.length() > 4 ? 2 : 1);
 						
-						cache.put(lookupString, correction);
-					}
-				} else {
-					correction = null;
+					cache.put(lookupString, correction);
 				}
 
 				if(correction == null) {					
@@ -54,9 +48,6 @@ public abstract class CorrectionLookup implements QueryLookup {
 						currentResult = lookupString;
 					
 					currentDistance += lookupString.length() / 2 + 1;
-					
-					if(i == offset)
-						currentPartialDistance = lookupString.length() / 2 + 1;
 				} else {					
 					if(i == offset)
 						currentResult = correction.token;
@@ -65,19 +56,19 @@ public abstract class CorrectionLookup implements QueryLookup {
 					currentFrequency += correction.frequency;
 					
 					if(i == offset)
-						currentPartialDistance = correction.distance;
+						currentReallDistance = correction.distance;
 				}
 			}
 			
 			if(distance == -1 || currentDistance < distance || (currentDistance == distance && currentFrequency > frequency)) {
 				distance = currentDistance;
-				partialDistance = currentPartialDistance;
+				realDistance = currentReallDistance;
 				resultString = currentResult;
 				resultOffset = offset + k;
 			}
 		}
 		
-		sumDistance += partialDistance;
+		sumDistance += realDistance;
 		
 		return new QueryMatch(resultString, resultOffset);
 	}

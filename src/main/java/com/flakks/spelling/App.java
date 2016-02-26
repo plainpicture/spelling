@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class App {
-	public static Map<String, Dictionary> dictionaries = null;
+	public static Map<String, Dictionary> dictionaries;
 	public static Map<String, TrieNode> trieNodes;
 	
 	public static Map<String, Dictionary> createDictionaries(List<String> lines) {
@@ -52,7 +53,12 @@ public class App {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		dictionaries = createDictionaries(Files.readAllLines(Paths.get(args[0]), StandardCharsets.UTF_8));
+		List<String> lines = new ArrayList<String>();
+		
+		for(int i = 0; i < args.length; i++)
+			lines.addAll(Files.readAllLines(Paths.get(args[i]), StandardCharsets.UTF_8));
+		
+		dictionaries = createDictionaries(lines);
 		trieNodes = createTrieNodes(dictionaries);
 		
 		new Server().start();

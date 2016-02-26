@@ -18,18 +18,19 @@ public class RequestHandler {
 
 		long time = System.currentTimeMillis();
 		String locale = jsonRequest.getString("locale");
+		String query = jsonRequest.getString("query").toLowerCase();
 		
 		if(jsonRequest.getString("operation").equals("correct")) {
 			SpellingLookup spellingLookup = new SpellingLookup(locale);
 			QueryMapper queryMapper = new QueryMapper(spellingLookup);
 			
-			String result = queryMapper.map(jsonRequest.getString("query"));
+			String result = queryMapper.map(query);
 			
 			time = System.currentTimeMillis() - time;
 			
 			return new JSONObject().put("query", result).put("took", time).put("distance", spellingLookup.sumDistance).toString();
 		} else if(jsonRequest.getString("operation").equals("suggest")) {
-			List<Suggestion> suggestions = new SpellingSuggestor(locale).suggest(jsonRequest.getString("query"));
+			List<Suggestion> suggestions = new SpellingSuggestor(locale).suggest(query);
 					
 			JSONObject response = new JSONObject();
 			JSONArray jsonSuggestions = new JSONArray();
