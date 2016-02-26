@@ -5,42 +5,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QueryMapper {
-	public int maxWords;
 	private QueryLookup queryLookup;
 	
 	public QueryMapper(QueryLookup queryLookup) {
 		this.queryLookup = queryLookup;
-		this.maxWords = 3;
-	}
-	
-	public QueryMapper(int maxWords) {
-		this.maxWords = maxWords;
 	}
 	
 	public String map(String query) {
-		StringBuffer result = new StringBuffer();
 		List<String> tokens = tokenize(query);
+		List<String> resultTokens = new ArrayList<String>();
 		
 		for(int i = 0; i < tokens.size(); i++) {
-			List<String> requests = new ArrayList<String>();
+			int nextOperatorIndex = nextOperatorIndex(tokens, i);
 			
-			int max = Math.min(i + maxWords - 1, tokens.size() - 1);
-			
-			for(int u = max; u >= i; u--)
-				requests.add(String.join(" ", tokens.subList(i, u + 1)).trim());
+			if(nextOperatorIndex == i) {
+				resultTokens.add(tokens.get(i));
+			} else {
+				List<String> tokenGroup = tokens.subList(i, nextOperatorIndex);
 				
-			QueryMatch queryMatch = queryLookup.lookup(requests);
-						
-			if(queryMatch != null && queryMatch.match.trim().length() > 0) {
-				i = max - queryMatch.index;
-						
-				result.append(" ").append(queryMatch.match);
-			} else if(i == max - queryMatch.index) {
-				result.append(" ").append(queryMatch.match);
+				int u;
+				
+				for(u = 0; u < tokenGroup.size(); u++) {
+					QueryMatch queryMatch = queryLookup.lookup(tokenGroup, u);
+					
+					resultTokens.add(queryMatch.match);
+					
+					u = queryMatch.offset - 1;
+				}
+				
+				i += u - 1;
 			}
 		}
 		
-		return result.toString().trim();
+		return StringHelper.join(" ", resultTokens);
+	}
+	
+	private int nextOperatorIndex(List<String> tokens, int offset) {
+		for(int i = offset; i < tokens.size(); i++) {
+			String token = tokens.get(i);
+			
+			if(token.equals("-") || token.equals("(") || token.equals(")") || token.equals("\"") || token.equals("+") || token.equals("|") || token.equals("&"))
+				return i;
+		}
+		
+		return tokens.size();
 	}
 	
 	private List<String> tokenize(String query) {
@@ -55,9 +63,14 @@ public class QueryMapper {
 				
 				for(u = i + 1; u < items.length && !items[u].equals("\""); u++)
 					phrase.append(" ").append(items[u].trim());
-				
+
 				if(u < items.length) {
+					result.add("\"");
+					
 					result.add(phrase.toString().trim());
+					
+					if(items[u].equals("\""))
+						result.add("\"");
 					
 					i = u;
 				}
@@ -73,6 +86,7 @@ public class QueryMapper {
 		return query
 			.replaceAll("(\\s|^)\\-", " - ")
 			.replaceAll("(\\s|^)\\+", " + ")
+			.replaceAll("(\\s|^)\\+", " & ")
 			.replaceAll("\\(", " ( ")
 			.replaceAll("\\)", " ) ")
 			.replaceAll("\\|", " | ")

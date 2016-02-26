@@ -17,10 +17,10 @@ public class SpellingSuggestor {
 		List<String> tokens = Arrays.asList(query.split("\\s+"));
 		List<Suggestion> suggestions = new ArrayList<Suggestion>();
 
-		for(int k = 0; k < Math.min(3, tokens.size()); k++) {
+		for(int k = 1; k <= Math.min(3, tokens.size()); k++) {
 			TrieNode node = App.trieNodes.get(locale);
 			
-			String suggestionQuery = String.join(" ", tokens.subList(tokens.size() - k - 1, tokens.size()));
+			String suggestionQuery = StringHelper.sliceJoin(" ", tokens, tokens.size() - k, tokens.size());
 			SuggestionLookup suggestionLookup = new SuggestionLookup(locale);
 			suggestionQuery = new QueryMapper(suggestionLookup).map(suggestionQuery);
 			
@@ -32,9 +32,11 @@ public class SpellingSuggestor {
 			}
 
 			if(node != null) {
-				String prefix = String.join(" ", tokens.subList(0, tokens.size() - k - 1));
 				SpellingLookup spellingLookup = new SpellingLookup(locale);
-				prefix = new QueryMapper(spellingLookup).map(prefix);
+				String prefix = StringHelper.sliceJoin(" ", tokens, 0, tokens.size() - k);
+				
+				if(tokens.size() - k > 0)
+					prefix = new QueryMapper(spellingLookup).map(prefix);
 				
 				for(Suggestion suggestion : node.suggestions)
 					suggestions.add(new Suggestion((prefix + " " + suggestion.token).trim(), spellingLookup.sumDistance + suggestionLookup.sumDistance, suggestion.frequency));

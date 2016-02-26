@@ -1,8 +1,8 @@
 
 # Spelling
 
-Multi-language, Multi word, utf-8 spelling correction server using a levenshtein automaton and a Trie.
-Written in java, requires java >= 1.8. Several optimizations like e.g. pruning the search trie via already found
+Multi-language, Multi word, utf-8 spelling correction and suggestion server using a levenshtein automaton and a Trie.
+Written in java. Several optimizations like e.g. pruning the search trie via already found
 distances and frequencies provide single millisecond performance for single keyword corrections.
 
 Compiliation:
@@ -31,10 +31,12 @@ If there are multiple matches with the same distance, the one with a higher freq
 
 The server listens on TCP port 12182 and uses a simple JSON based protocol.
 
+# Correction
+
 Request:
 
 ```json
-{"query":"keywrd x","locale":"en"}\n
+{"operation":"correct","query":"keywrd x","locale":"en"}\n
 ```
 
 Response:
@@ -44,6 +46,20 @@ Response:
 ```
 
 `took` tells you how long the response took.
+
+# Suggestion
+
+Request:
+
+```json
+{"operation":"suggest","query":"kyeword sn","locale":en"}\n
+```
+
+Response:
+
+```json
+{"took":4,"suggestions":[{"query":"keyword snow","frequency":2919},{"query":"keyword snowfall","frequency":2140},...]"}
+```
 
 Currently, certain defaults apply:
 

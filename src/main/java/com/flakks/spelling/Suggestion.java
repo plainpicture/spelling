@@ -18,8 +18,6 @@ public class Suggestion implements Comparable<Suggestion> {
 		if(distanceCompare != 0)
 			return distanceCompare;
 		
-		//System.out.println(token + "(" + frequency + ") <=>" + suggestion.token + "(" + suggestion.frequency + ")");
-		
 		return Integer.compare(frequency * -1, suggestion.frequency * -1);
 	}
 }

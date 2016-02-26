@@ -8,13 +8,13 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class SpellingLookupTest extends TestCase {
-    public SpellingLookupTest(String testName) {
+public class SuggestionLookupTest extends TestCase {
+    public SuggestionLookupTest(String testName) {
         super(testName);
     }
   
     public static Test suite() {
-        return new TestSuite(SpellingLookupTest.class);
+        return new TestSuite(SuggestionLookupTest.class);
     }
 
     public void testLookup() {
@@ -27,11 +27,11 @@ public class SpellingLookupTest extends TestCase {
     	
     	List<String> tokens = new ArrayList<String>();
     	tokens.add("firstt");
-    	tokens.add("worrd");
+    	tokens.add("wot");
     	
-    	QueryMatch queryMatch = new SpellingLookup("en").lookup(tokens, 0);
+    	QueryMatch queryMatch = new SuggestionLookup("en").lookup(tokens, 0);
     	
-    	assertEquals("first word", queryMatch.match);
+    	assertEquals("first wo", queryMatch.match);
     	assertEquals(2, queryMatch.offset);
     }
 }

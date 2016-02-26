@@ -12,16 +12,17 @@ public class Correction implements Comparable<Correction> {
 		this.frequency = frequency;
 	}
 	
-	public int compareTo(Correction suggestion) {		
-		if(distance < suggestion.distance)
+	public int compareTo(Correction correction) {		
+		if(distance < correction.distance)
 			return -1;
 		
-		if(distance > suggestion.distance)
+		if(distance > correction.distance)
 			return 1;
-
-		if(frequency < suggestion.frequency)
+		
+		if(frequency < correction.frequency)
 			return 1;
-		else if(frequency > suggestion.frequency)
+		
+		if(frequency > correction.frequency)
 			return -1;
 		
 		return 0;

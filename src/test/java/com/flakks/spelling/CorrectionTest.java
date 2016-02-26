@@ -14,7 +14,7 @@ public class CorrectionTest extends TestCase {
         return new TestSuite(CorrectionTest.class);
     }
     
-    public void testSuggestion() {
+    public void testCorrection() {
     	Correction correction = new Correction("token", 1, 2);
     	
     	assertEquals("token", correction.token);
