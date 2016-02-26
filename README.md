@@ -8,7 +8,7 @@ distances and frequencies provide single millisecond performance for single keyw
 Compiliation:
 
 ```
-$ mvn clean install
+$ mvn clean install assembly:single
 ```
 
 Run:
@@ -28,10 +28,11 @@ en  keyword 2 28929
 containing three columns per line. First column is an arbitrary locale (language identifier),
 the second column is the keyword or phrase and the third column is a frequency or score value.
 If there are multiple matches with the same distance, the one with a higher frequency wins.
+Phrases get better score (distance / number of words).
 
 The server listens on TCP port 12182 and uses a simple JSON based protocol.
 
-# Correction
+## Correction
 
 Request:
 
@@ -47,12 +48,12 @@ Response:
 
 `took` tells you how long the response took.
 
-# Suggestion
+## Suggestion
 
 Request:
 
 ```json
-{"operation":"suggest","query":"kyeword sn","locale":en"}\n
+{"operation":"suggest","query":"kyeword sn","locale":"en"}\n
 ```
 
 Response:

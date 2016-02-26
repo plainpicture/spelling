@@ -22,18 +22,20 @@ public abstract class CorrectionLookup implements QueryLookup {
 		int maxK = maxOffset - offset;
 		String resultString = null;
 		int resultOffset = -1;
-		int distance = -1;
+		float distance = -1;
 		int realDistance = -1;
 		int frequency = 0;
 		
 		for(int k = 1; k <= maxK; k++) {
 			String currentResult = null;
-			int currentDistance = 0;
+			float currentDistance = 0;
 			int currentReallDistance = 0;
 			int currentFrequency = 0;
 			
 			for(int i = offset; i < maxOffset; i += k) {
-				String lookupString = StringHelper.sliceJoin(" ", tokens, i, Math.min(Math.min(i + k, tokens.size()), maxOffset));
+				int max = Math.min(Math.min(i + k, tokens.size()), maxOffset);
+				String lookupString = StringHelper.sliceJoin(" ", tokens, i, max);
+				int numWords = max - i;
 				
 				Correction correction = cache.get(lookupString);
 					
@@ -47,12 +49,12 @@ public abstract class CorrectionLookup implements QueryLookup {
 					if(i == offset)
 						currentResult = lookupString;
 					
-					currentDistance += lookupString.length() / 2 + 1;
+					currentDistance += (lookupString.length() / 2 + 1) / (float)numWords;
 				} else {					
 					if(i == offset)
 						currentResult = correction.token;
 					
-					currentDistance += correction.distance;
+					currentDistance += correction.distance / (float)numWords;
 					currentFrequency += correction.frequency;
 					
 					if(i == offset)
