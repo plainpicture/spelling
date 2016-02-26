@@ -1,6 +1,9 @@
 
 package com.flakks.spelling;
 
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class RequestHandler {
@@ -14,13 +17,31 @@ public class RequestHandler {
 		JSONObject jsonRequest = new JSONObject(request);
 
 		long time = System.currentTimeMillis();
+		String locale = jsonRequest.getString("locale");
 		
-		SpellingQueryMapper mapper = new SpellingQueryMapper(jsonRequest.getString("locale"));
+		if(jsonRequest.getString("operation").equals("correct")) {
+			SpellingLookup spellingLookup = new SpellingLookup(locale);
+			QueryMapper queryMapper = new QueryMapper(spellingLookup);
+			
+			String result = queryMapper.map(jsonRequest.getString("query"));
+			
+			time = System.currentTimeMillis() - time;
+			
+			return new JSONObject().put("query", result).put("took", time).put("distance", spellingLookup.sumDistance).toString();
+		} else if(jsonRequest.getString("operation").equals("suggest")) {
+			List<Suggestion> suggestions = new SpellingSuggestor(locale).suggest(jsonRequest.getString("query"));
+					
+			JSONObject response = new JSONObject();
+			JSONArray jsonSuggestions = new JSONArray();
+
+			for(Suggestion suggestion : suggestions)
+				jsonSuggestions.put(new JSONObject().put("query", suggestion.token).put("frequency", suggestion.frequency));
+	
+			time = System.currentTimeMillis() - time;
+					
+			return response.put("suggestions", jsonSuggestions).put("took", time).toString();
+		}
 		
-		String result = mapper.map(jsonRequest.getString("query"));
-		
-		time = System.currentTimeMillis() - time;
-		
-		return new JSONObject().put("query", result).put("took", time).put("distance",  mapper.sumDistance).toString();
+		return "{}";
 	}
 }

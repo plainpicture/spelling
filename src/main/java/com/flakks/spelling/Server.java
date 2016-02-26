@@ -30,6 +30,7 @@ class Connection extends Thread {
 			}
 		} catch(IOException e) {
 			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 }

@@ -38,4 +38,23 @@ public class AutomatonTest extends TestCase {
     	
     	assertEquals("word 2", new Automaton("word", 2).correct(root).token);
     }
+    
+    public void testCorrectPrefixDistance() {
+    	TrieNode root = new TrieNode();
+    	root.insert("first", 1);
+    	root.insert("second", 1);
+    	
+    	assertEquals("first", new Automaton("fist", 2).correctPrefix(root).token);
+    	assertEquals("second", new Automaton("secnd", 2).correctPrefix(root).token);
+    }
+    
+    public void testCorrectPrefixFrequency() {
+    	TrieNode root = new TrieNode();
+    	root.insert("wonder", 1);
+    	root.insert("wonderful", 2);
+    	root.insert("wondering", 3);
+    	
+    	assertEquals("won", new Automaton("wont", 2).correctPrefix(root).token);
+    	assertEquals("wonder", new Automaton("wonderx", 2).correctPrefix(root).token);
+    }
 }

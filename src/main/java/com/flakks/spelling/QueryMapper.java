@@ -4,10 +4,12 @@ package com.flakks.spelling;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class QueryMapper {
+public class QueryMapper {
 	public int maxWords;
+	private QueryLookup queryLookup;
 	
-	public QueryMapper() {
+	public QueryMapper(QueryLookup queryLookup) {
+		this.queryLookup = queryLookup;
 		this.maxWords = 3;
 	}
 	
@@ -15,27 +17,26 @@ abstract public class QueryMapper {
 		this.maxWords = maxWords;
 	}
 	
-	protected abstract String lookup(String str);
-	
 	public String map(String query) {
 		StringBuffer result = new StringBuffer();
 		List<String> tokens = tokenize(query);
 		
 		for(int i = 0; i < tokens.size(); i++) {
-			for(int u = Math.min(i + maxWords - 1, tokens.size() - 1); u >= i; u--) {
-				String request = String.join(" ", tokens.subList(i, u + 1)).trim();
+			List<String> requests = new ArrayList<String>();
+			
+			int max = Math.min(i + maxWords - 1, tokens.size() - 1);
+			
+			for(int u = max; u >= i; u--)
+				requests.add(String.join(" ", tokens.subList(i, u + 1)).trim());
 				
-				if(request.length() > 0) {
-					String response = lookup(request);
+			QueryMatch queryMatch = queryLookup.lookup(requests);
 						
-					if(response != null && response.trim().length() > 0) {
-						i = u;
+			if(queryMatch != null && queryMatch.match.trim().length() > 0) {
+				i = max - queryMatch.index;
 						
-						result.append(" ").append(response);
-					} else if(i == u) {
-						result.append(" ").append(request);
-					}
-				}
+				result.append(" ").append(queryMatch.match);
+			} else if(i == max - queryMatch.index) {
+				result.append(" ").append(queryMatch.match);
 			}
 		}
 		
@@ -47,12 +48,12 @@ abstract public class QueryMapper {
 		List<String> result = new ArrayList<String>();
 		
 		for(int i = 0; i < items.length; i++) {
-			if(items[i] == "\"") {
+			if(items[i].equals("\"")) {
 				StringBuffer phrase = new StringBuffer();
 				
 				int u;
 				
-				for(u = i + 1; u < items.length && items[u] != "\""; u++)
+				for(u = i + 1; u < items.length && !items[u].equals("\""); u++)
 					phrase.append(" ").append(items[u].trim());
 				
 				if(u < items.length) {

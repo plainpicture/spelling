@@ -70,8 +70,67 @@ public class Automaton {
 	
 	private boolean canMatch(State state, TrieNode node) {
 		return state.indices.size() > 0 &&
-			((node.minLength - string.length() < maxEdits && string.length() - node.maxLength < maxEdits) ||
-			(node.minLength - string.length() <= maxEdits && string.length() - node.maxLength <= maxEdits && minFrequency < node.maxFrequency));
+				((node.minLength - string.length() < maxEdits && string.length() - node.maxLength < maxEdits) ||
+                (node.minLength - string.length() <= maxEdits && string.length() - node.maxLength <= maxEdits && minFrequency < node.maxFrequency));
+
+	}
+	
+	private boolean canMatchPrefix(State state) {
+		return state.indices.size() > 0;
+	}
+
+	private TrieNode validPrefixNode(TrieNode node) {
+		int length = string.length();
+		
+		for(int i = 0; i < length; i++) {
+			TrieNode newNode = node.children.get(string.charAt(i));
+			
+			if(newNode == null)
+				return null;
+			
+			node = newNode;
+		}
+		
+		return node;
+	}
+	
+	public Correction correctPrefix(TrieNode node) {
+		TrieNode validPrefixNode = validPrefixNode(node);
+		
+		if(validPrefixNode != null)
+			return new Correction(string, 0, validPrefixNode.sumFrequency);
+		
+		return correctPrefixRecursive(node, start(), null);
+	}
+	
+	public Correction correctPrefixRecursive(TrieNode node, State state, Correction correction) {
+		if(isMatch(state)) {
+			Correction newCorrection = new Correction(node.prefix, state.values.get(state.values.size() - 1), node.sumFrequency);
+
+			if(correction == null) {				
+				maxEdits = newCorrection.distance;
+				minFrequency = newCorrection.frequency;
+
+				correction = newCorrection;
+			} else if(newCorrection.compareTo(correction) == -1) {
+				maxEdits = Math.min(maxEdits, newCorrection.distance);
+				minFrequency = Math.max(minFrequency, newCorrection.frequency);
+				
+				correction = newCorrection;
+			}
+		}
+		
+		for(Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+			Character c = entry.getKey();
+			TrieNode newNode = entry.getValue();
+			
+			State newState = step(state, c);
+			
+			if(canMatchPrefix(newState))
+				correction = correctPrefixRecursive(newNode, newState, correction);
+		}
+
+		return correction;
 	}
 
 	public Correction correct(TrieNode node) {
@@ -79,27 +138,27 @@ public class Automaton {
 	}
 	
 	private Correction correctRecursive(TrieNode node, State state, Correction correction) {
+		if(node.word != null && isMatch(state)) {
+			Correction newCorrection = new Correction(node.word, state.values.get(state.values.size() - 1), node.frequency);
+
+			if(correction == null) {				
+				maxEdits = newCorrection.distance;
+				minFrequency = newCorrection.frequency;
+
+				correction = newCorrection;
+			} else if(newCorrection.compareTo(correction) == -1) {
+				maxEdits = Math.min(maxEdits, newCorrection.distance);
+				minFrequency = Math.max(minFrequency, newCorrection.frequency);
+				
+				correction = newCorrection;
+			}
+		}
+		
 		for(Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
 			Character c = entry.getKey();
 			TrieNode newNode = entry.getValue();
 			
 			State newState = step(state, c);
-			
-			if(newNode.word != null && isMatch(newState)) {
-				Correction newSuggestion = new Correction(newNode.word, newState.values.get(newState.values.size() - 1), newNode.frequency);
-				
-				if(correction == null) {
-					maxEdits = newSuggestion.distance;
-					minFrequency = newSuggestion.frequency;
-					
-					correction = newSuggestion;
-				} else if(newSuggestion.compareTo(correction) == -1) {
-					maxEdits = Math.min(maxEdits, newSuggestion.distance);
-					minFrequency = Math.max(minFrequency, newSuggestion.frequency);
-					
-					correction = newSuggestion;
-				}
-			}
 			
 			if(canMatch(newState, newNode))
 				correction = correctRecursive(newNode, newState, correction);
