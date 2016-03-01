@@ -43,7 +43,7 @@ Request:
 Response:
 
 ```json
-{"query":"keyword 1","distance":2,"took":6}
+{"query":"keyword 1","distance":2,"took":6}\n
 ```
 
 `took` tells you how long the response took.
@@ -59,7 +59,7 @@ Request:
 Response:
 
 ```json
-{"took":4,"suggestions":[{"query":"keyword snow","frequency":2919},{"query":"keyword snowfall","frequency":2140},...]"}
+{"took":4,"suggestions":[{"query":"keyword snow","frequency":2919},{"query":"keyword snowfall","frequency":2140},"..."]"}\n
 ```
 
 Currently, certain defaults apply:

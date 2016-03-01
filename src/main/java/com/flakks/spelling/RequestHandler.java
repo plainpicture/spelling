@@ -24,11 +24,11 @@ public class RequestHandler {
 			SpellingLookup spellingLookup = new SpellingLookup(locale);
 			QueryMapper queryMapper = new QueryMapper(spellingLookup);
 			
-			String result = queryMapper.map(query);
+			String mappedQuery = queryMapper.map(query);
 			
 			time = System.currentTimeMillis() - time;
 			
-			return new JSONObject().put("query", result).put("took", time).put("distance", spellingLookup.sumDistance).toString();
+			return new JSONObject().put("query", mappedQuery).put("took", time).put("distance", spellingLookup.sumDistance).toString();
 		} else if(jsonRequest.getString("operation").equals("suggest")) {
 			List<Suggestion> suggestions = new SpellingSuggestor(locale).suggest(query);
 					

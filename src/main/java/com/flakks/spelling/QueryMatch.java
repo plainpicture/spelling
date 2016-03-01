@@ -1,4 +1,3 @@
-
 package com.flakks.spelling;
 
 public class QueryMatch {

@@ -39,24 +39,19 @@ public class RequestHandlerTest extends TestCase {
     
     public void testProcessSuggest() {
     	List<String> lines = new ArrayList<String>();
-    	lines.add("en\tfirst\t1");
-    	lines.add("en\tsecond\t2");
-    	lines.add("en\tthird\t3");
     	lines.add("en\tentries\t4");
     	lines.add("en\tentry\t5");
-    	lines.add("en\tmultiple words\t6");
-    	lines.add("en\tmultiple\t7");
     	
     	App.dictionaries = App.createDictionaries(lines);
     	App.trieNodes = App.createTrieNodes(App.dictionaries);
     	
-    	RequestHandler requestHandler = new RequestHandler("{'operation':'suggest','query':'first ent','locale':'en'}");
+    	RequestHandler requestHandler = new RequestHandler("{'operation':'suggest','query':'entt','locale':'en'}");
     	
     	JSONObject jsonObject = new JSONObject(requestHandler.process());
     	
     	List<String> expected = new ArrayList<String>();
-    	expected.add("first entry");
-    	expected.add("first entries");
+    	expected.add("entry");
+    	expected.add("entries");
     	
     	List<String> actual = new ArrayList<String>();
     	

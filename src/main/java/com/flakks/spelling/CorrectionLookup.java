@@ -9,6 +9,13 @@ public abstract class CorrectionLookup implements QueryLookup {
 	private Map<String, Correction> cache;
 	public int sumDistance;
 	
+	public static int[][][] MATRIX = {
+			{{0, 1}, {1, 1}, {2, 1}},
+			{{0, 1}, {1, 2}},
+			{{0, 2}, {2, 1}},
+			{{0, 3}}
+	};
+	
 	public CorrectionLookup() {
 		sumDistance = 0;
 		
@@ -18,24 +25,27 @@ public abstract class CorrectionLookup implements QueryLookup {
 	public abstract Correction correct(String lookupString, int maxEdits);
 	
 	public QueryMatch lookup(List<String> tokens, int offset) {
-		int maxOffset = Math.min(offset + 3, tokens.size());
-		int maxK = maxOffset - offset;
 		String resultString = null;
 		int resultOffset = -1;
 		float distance = -1;
 		int realDistance = -1;
 		int frequency = 0;
 		
-		for(int k = 1; k <= maxK; k++) {
+		for(int u = 0; u < MATRIX.length; u++) {
 			String currentResult = null;
 			float currentDistance = 0;
-			int currentReallDistance = 0;
+			int currentRealDistance = 0;
 			int currentFrequency = 0;
 			
-			for(int i = offset; i < maxOffset; i += k) {
-				int max = Math.min(Math.min(i + k, tokens.size()), maxOffset);
-				String lookupString = StringHelper.sliceJoin(" ", tokens, i, max);
-				int numWords = max - i;
+			for(int v = 0; v < MATRIX[u].length; v++) {
+				int from = offset + MATRIX[u][v][0];
+				int to = Math.min(from + MATRIX[u][v][1], tokens.size());
+				
+				if(to <= from)
+					continue;
+				
+				String lookupString = StringHelper.sliceJoin(" ", tokens, from, to);
+				int numWords = to - from;
 				
 				Correction correction = cache.get(lookupString);
 					
@@ -46,27 +56,26 @@ public abstract class CorrectionLookup implements QueryLookup {
 				}
 
 				if(correction == null) {					
-					if(i == offset)
+					if(from == offset)
 						currentResult = lookupString;
 					
 					currentDistance += (lookupString.length() / 2 + 1) / (float)numWords;
-				} else {					
-					if(i == offset)
+				} else {
+					if(from == offset) {
 						currentResult = correction.token;
+						currentRealDistance = correction.distance;
+					}
 					
 					currentDistance += correction.distance / (float)numWords;
 					currentFrequency += correction.frequency;
-					
-					if(i == offset)
-						currentReallDistance = correction.distance;
 				}
 			}
 			
 			if(distance == -1 || currentDistance < distance || (currentDistance == distance && currentFrequency > frequency)) {
 				distance = currentDistance;
-				realDistance = currentReallDistance;
+				realDistance = currentRealDistance;
 				resultString = currentResult;
-				resultOffset = offset + k;
+				resultOffset = Math.min(offset + MATRIX[u][0][1], tokens.size());
 			}
 		}
 		

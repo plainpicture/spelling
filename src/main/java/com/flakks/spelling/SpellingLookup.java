@@ -21,6 +21,6 @@ public class SpellingLookup extends CorrectionLookup {
 		if(lookupString.length() < 4)
 			return null;
 		
-		return new Automaton(lookupString, lookupString.length() > 4 ? 2 : 1).correct(trieNode);
+		return new Automaton(lookupString, lookupString.length() > 5 ? 2 : 1).correct(trieNode);
 	}
 }
