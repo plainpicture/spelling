@@ -28,7 +28,7 @@ public class Automaton {
 		return new State(indices, values);
 	}
 	
-	private State step(State state, char c) {
+	private State step(State state, Character c, Character previous) {
 		List<Integer> indices = state.indices;
 		List<Integer> values = state.values;
 		
@@ -46,7 +46,7 @@ public class Automaton {
 			if(i == string.length())
 				break;
 			
-			int cost = string.charAt(i) == c ? 0 : 1;
+			int cost = string.charAt(i) == c || (i > 0 && previous != null && string.charAt(i - 1) == c && string.charAt(i) == previous) ? 0 : 1;
 			int val = values.get(j) + cost;
 			
 			if(newIndices.size() > 0 && newIndices.get(newIndices.size() - 1) == i)
@@ -124,7 +124,7 @@ public class Automaton {
 			Character c = entry.getKey();
 			TrieNode newNode = entry.getValue();
 			
-			State newState = step(state, c);
+			State newState = step(state, c, node.c);
 			
 			if(canMatchPrefix(newState))
 				correction = correctPrefixRecursive(newNode, newState, correction);
@@ -158,7 +158,7 @@ public class Automaton {
 			Character c = entry.getKey();
 			TrieNode newNode = entry.getValue();
 			
-			State newState = step(state, c);
+			State newState = step(state, c, node.c);
 			
 			if(canMatch(newState, newNode))
 				correction = correctRecursive(newNode, newState, correction);

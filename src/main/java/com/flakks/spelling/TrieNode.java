@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public class TrieNode {
 	public String word;
+	public Character c;
 	public String prefix;
 	public int frequency;
 	public int sumFrequency;
@@ -19,6 +20,7 @@ public class TrieNode {
 	
 	public TrieNode() {
 		word = null;
+		c = null;
 		prefix = null;
 		frequency = -1;
 		sumFrequency = 0;
@@ -59,6 +61,7 @@ public class TrieNode {
 				
 				if(newNode == null) {
 					newNode = new TrieNode();
+					newNode.c = c;
 					
 					node.children.put(c, newNode);
 				}

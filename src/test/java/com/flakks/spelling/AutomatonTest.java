@@ -27,8 +27,17 @@ public class AutomatonTest extends TestCase {
     	root.insert("first", 1);
     	root.insert("second", 1);
     	
-    	assertEquals("first", new Automaton("fist", 2).correct(root).token);
+    	assertEquals("first", new Automaton("fist", 1).correct(root).token);
+    	assertEquals(1, new Automaton("fist", 1).correct(root).distance);
+    	
+    	assertEquals("first", new Automaton("fitst", 1).correct(root).token);
+    	assertEquals(1, new Automaton("fist", 1).correct(root).distance);
+    	
+    	assertEquals("second", new Automaton("secnod", 1).correct(root).token);
+    	assertEquals(1, new Automaton("secnod", 1).correct(root).distance);
+    	
     	assertEquals("second", new Automaton("secnd", 2).correct(root).token);
+    	assertEquals(2, new Automaton("secd", 2).correct(root).distance);
     }
     
     public void testCorrectFrequency() {
