@@ -2,9 +2,9 @@
 package com.flakks.spelling;
 
 public class Suggestion implements Comparable<Suggestion> {
-	public String token;
-	public int frequency;
-	public int distance;
+	private String token;
+	private int frequency;
+	private int distance;
 	
 	public Suggestion(String token, int distance, int frequency) {
 		this.token = token;
@@ -19,5 +19,17 @@ public class Suggestion implements Comparable<Suggestion> {
 			return distanceCompare;
 		
 		return Integer.compare(frequency * -1, suggestion.frequency * -1);
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	
+	public int getFrequency() {
+		return frequency;
+	}
+	
+	public int getDistance() {
+		return distance;
 	}
 }

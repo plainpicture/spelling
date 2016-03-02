@@ -17,9 +17,9 @@ public class CorrectionTest extends TestCase {
     public void testCorrection() {
     	Correction correction = new Correction("token", 1, 2);
     	
-    	assertEquals("token", correction.token);
-    	assertEquals(1, correction.distance);
-    	assertEquals(2, correction.frequency);
+    	assertEquals("token", correction.getToken());
+    	assertEquals(1, correction.getDistance());
+    	assertEquals(2, correction.getFrequency());
     }
     
     public void testCompareTo() {

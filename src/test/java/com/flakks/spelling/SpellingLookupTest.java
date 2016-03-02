@@ -31,7 +31,7 @@ public class SpellingLookupTest extends TestCase {
     	
     	QueryMatch queryMatch = new SpellingLookup("en").lookup(tokens, 0);
     	
-    	assertEquals("first word", queryMatch.match);
-    	assertEquals(2, queryMatch.offset);
+    	assertEquals("first word", queryMatch.getMatch());
+    	assertEquals(2, queryMatch.getOffset());
     }
 }

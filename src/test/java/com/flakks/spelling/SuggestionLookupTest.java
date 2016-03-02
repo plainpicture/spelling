@@ -31,7 +31,7 @@ public class SuggestionLookupTest extends TestCase {
     	
     	QueryMatch queryMatch = new SuggestionLookup("en").lookup(tokens, 0);
     	
-    	assertEquals("first wo", queryMatch.match);
-    	assertEquals(2, queryMatch.offset);
+    	assertEquals("first wo", queryMatch.getMatch());
+    	assertEquals(2, queryMatch.getOffset());
     }
 }

@@ -28,7 +28,7 @@ public class RequestHandler {
 			
 			time = System.currentTimeMillis() - time;
 			
-			return new JSONObject().put("query", mappedQuery).put("took", time).put("distance", spellingLookup.sumDistance).toString();
+			return new JSONObject().put("query", mappedQuery).put("took", time).put("distance", spellingLookup.getSumDistance()).toString();
 		} else if(jsonRequest.getString("operation").equals("suggest")) {
 			List<Suggestion> suggestions = new SpellingSuggestor(locale).suggest(query);
 					
@@ -36,7 +36,7 @@ public class RequestHandler {
 			JSONArray jsonSuggestions = new JSONArray();
 
 			for(Suggestion suggestion : suggestions)
-				jsonSuggestions.put(new JSONObject().put("query", suggestion.token).put("frequency", suggestion.frequency));
+				jsonSuggestions.put(new JSONObject().put("query", suggestion.getToken()).put("frequency", suggestion.getFrequency()));
 	
 			time = System.currentTimeMillis() - time;
 					

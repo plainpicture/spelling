@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class CorrectionLookup implements QueryLookup {
 	private Map<String, Correction> cache;
-	public int sumDistance;
+	private int sumDistance;
 	
 	public static int[][][] MATRIX = {
 			{{0, 1}, {1, 1}, {2, 1}},
@@ -20,6 +20,10 @@ public abstract class CorrectionLookup implements QueryLookup {
 		sumDistance = 0;
 		
 		cache = new HashMap<String, Correction>();
+	}
+	
+	public int getSumDistance() {
+		return sumDistance;
 	}
 	
 	public abstract Correction correct(String lookupString, int maxEdits);
@@ -62,12 +66,12 @@ public abstract class CorrectionLookup implements QueryLookup {
 					currentDistance += (lookupString.length() / 2 + 1) / (float)numWords;
 				} else {
 					if(from == offset) {
-						currentResult = correction.token;
-						currentRealDistance = correction.distance;
+						currentResult = correction.getToken();
+						currentRealDistance = correction.getDistance();
 					}
 					
-					currentDistance += correction.distance / (float)numWords;
-					currentFrequency += correction.frequency;
+					currentDistance += correction.getDistance() / (float)numWords;
+					currentFrequency += correction.getFrequency();
 				}
 			}
 			

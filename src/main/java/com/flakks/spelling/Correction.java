@@ -2,9 +2,21 @@
 package com.flakks.spelling;
 
 public class Correction implements Comparable<Correction> {
-	public String token;
-	public int distance;
-	public int frequency;
+	private String token;
+	private int distance;
+	private int frequency;
+	
+	public String getToken() {
+		return token;
+	}
+	
+	public int getDistance() {
+		return distance;
+	}
+	
+	public int getFrequency() {
+		return frequency;
+	}
 	
 	public Correction(String token, int distance, int frequency) {
 		this.token = token;

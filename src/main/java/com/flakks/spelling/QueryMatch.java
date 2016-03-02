@@ -1,11 +1,19 @@
 package com.flakks.spelling;
 
 public class QueryMatch {
-	public String match;
-	public int offset;
+	private String match;
+	private int offset;
 	
 	public QueryMatch(String match, int offset) {
 		this.match = match;
 		this.offset = offset;
+	}
+	
+	public String getMatch() {
+		return match;
+	}
+	
+	public int getOffset() {
+		return offset;
 	}
 }

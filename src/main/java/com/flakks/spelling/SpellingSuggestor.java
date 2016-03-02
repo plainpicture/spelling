@@ -29,7 +29,7 @@ public class SpellingSuggestor {
 
 		if(node != null) {
 			for(Suggestion suggestion : node.suggestions)
-				suggestions.add(new Suggestion(suggestion.token, suggestionLookup.sumDistance, suggestion.frequency));
+				suggestions.add(new Suggestion(suggestion.getToken(), suggestionLookup.getSumDistance(), suggestion.getFrequency()));
 	
 			Collections.sort(suggestions);
 		}

@@ -17,7 +17,7 @@ public class QueryMatchTest extends TestCase {
     public void testQueryMatch() {
     	QueryMatch queryMatch = new QueryMatch("match", 1);
     	
-    	assertEquals("match", queryMatch.match);
-    	assertEquals(1, queryMatch.offset);
+    	assertEquals("match", queryMatch.getMatch());
+    	assertEquals(1, queryMatch.getOffset());
     }
 }

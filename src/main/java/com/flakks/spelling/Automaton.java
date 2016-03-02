@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Automaton {
-	public String string;
-	public int maxEdits;
-	public int minFrequency;
+	private String string;
+	private int maxEdits;
+	private int minFrequency;
 	
 	public Automaton(String string, int maxEdits) {
 		this.string = string;
@@ -108,13 +108,13 @@ public class Automaton {
 			Correction newCorrection = new Correction(node.prefix, state.values.get(state.values.size() - 1), node.sumFrequency);
 
 			if(correction == null) {				
-				maxEdits = newCorrection.distance;
-				minFrequency = newCorrection.frequency;
+				maxEdits = newCorrection.getDistance();
+				minFrequency = newCorrection.getFrequency();
 
 				correction = newCorrection;
 			} else if(newCorrection.compareTo(correction) == -1) {
-				maxEdits = Math.min(maxEdits, newCorrection.distance);
-				minFrequency = Math.max(minFrequency, newCorrection.frequency);
+				maxEdits = Math.min(maxEdits, newCorrection.getDistance());
+				minFrequency = Math.max(minFrequency, newCorrection.getFrequency());
 				
 				correction = newCorrection;
 			}
@@ -142,13 +142,13 @@ public class Automaton {
 			Correction newCorrection = new Correction(node.word, state.values.get(state.values.size() - 1), node.frequency);
 
 			if(correction == null) {				
-				maxEdits = newCorrection.distance;
-				minFrequency = newCorrection.frequency;
+				maxEdits = newCorrection.getDistance();
+				minFrequency = newCorrection.getFrequency();
 
 				correction = newCorrection;
 			} else if(newCorrection.compareTo(correction) == -1) {
-				maxEdits = Math.min(maxEdits, newCorrection.distance);
-				minFrequency = Math.max(minFrequency, newCorrection.frequency);
+				maxEdits = Math.min(maxEdits, newCorrection.getDistance());
+				minFrequency = Math.max(minFrequency, newCorrection.getFrequency());
 				
 				correction = newCorrection;
 			}

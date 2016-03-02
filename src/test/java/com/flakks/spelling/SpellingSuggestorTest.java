@@ -30,8 +30,8 @@ public class SpellingSuggestorTest extends TestCase {
         List<Suggestion> suggestions = new SpellingSuggestor("en").suggest("firrst wor");
         
         assertEquals(3, suggestions.size());
-        assertEquals("first word3", suggestions.get(0).token);
-        assertEquals("first word2", suggestions.get(1).token);
-        assertEquals("first word1", suggestions.get(2).token);
+        assertEquals("first word3", suggestions.get(0).getToken());
+        assertEquals("first word2", suggestions.get(1).getToken());
+        assertEquals("first word1", suggestions.get(2).getToken());
     }
 }

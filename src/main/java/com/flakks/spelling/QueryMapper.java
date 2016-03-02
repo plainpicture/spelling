@@ -28,9 +28,9 @@ public class QueryMapper {
 				for(u = 0; u < tokenGroup.size(); u++) {
 					QueryMatch queryMatch = queryLookup.lookup(tokenGroup, u);
 					
-					resultTokens.add(queryMatch.match);
+					resultTokens.add(queryMatch.getMatch());
 					
-					u = queryMatch.offset - 1;
+					u = queryMatch.getOffset() - 1;
 				}
 				
 				i += u - 1;
