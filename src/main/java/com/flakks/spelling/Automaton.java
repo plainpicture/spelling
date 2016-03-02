@@ -7,11 +7,13 @@ import java.util.Map;
 
 public class Automaton {
 	private String string;
+	private String locale;
 	private int maxEdits;
 	private int minFrequency;
 	
-	public Automaton(String string, int maxEdits) {
+	public Automaton(String string, String locale, int maxEdits) {
 		this.string = string;
+		this.locale = locale;
 		this.maxEdits = maxEdits;
 		this.minFrequency = -1;
 	}
@@ -69,9 +71,7 @@ public class Automaton {
 	}
 	
 	private boolean canMatch(State state, TrieNode node) {
-		return state.indices.size() > 0 &&
-				((node.minLength - string.length() < maxEdits && string.length() - node.maxLength < maxEdits) ||
-                (node.minLength - string.length() <= maxEdits && string.length() - node.maxLength <= maxEdits && minFrequency < node.maxFrequency));
+		return state.indices.size() > 0 && (node.minLength - string.length() <= maxEdits && string.length() - node.maxLength <= maxEdits);
 
 	}
 	
@@ -98,14 +98,14 @@ public class Automaton {
 		TrieNode validPrefixNode = validPrefixNode(node);
 		
 		if(validPrefixNode != null)
-			return new Correction(string, 0, validPrefixNode.sumFrequency);
+			return new Correction(string, locale, string, 0, validPrefixNode.sumFrequency);
 		
 		return correctPrefixRecursive(node, start(), null);
 	}
 	
 	public Correction correctPrefixRecursive(TrieNode node, State state, Correction correction) {
 		if(isMatch(state)) {
-			Correction newCorrection = new Correction(node.prefix, state.values.get(state.values.size() - 1), node.sumFrequency);
+			Correction newCorrection = new Correction(node.prefix, locale, string, state.values.get(state.values.size() - 1), node.sumFrequency);
 
 			if(correction == null) {				
 				maxEdits = newCorrection.getDistance();
@@ -139,7 +139,7 @@ public class Automaton {
 	
 	private Correction correctRecursive(TrieNode node, State state, Correction correction) {
 		if(node.word != null && isMatch(state)) {
-			Correction newCorrection = new Correction(node.word, state.values.get(state.values.size() - 1), node.frequency);
+			Correction newCorrection = new Correction(node.word, locale, string, state.values.get(state.values.size() - 1), node.frequency);
 
 			if(correction == null) {				
 				maxEdits = newCorrection.getDistance();

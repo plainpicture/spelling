@@ -19,17 +19,17 @@ public class AutomatonTest extends TestCase {
     	root.insert("first", 1);
     	root.insert("second", 1);
     	
-    	assertEquals("first", new Automaton("fist", 1).correct(root).getToken());
-    	assertEquals(1, new Automaton("fist", 1).correct(root).getDistance());
+    	assertEquals("first", new Automaton("fist", "en", 1).correct(root).getToken());
+    	assertEquals(1, new Automaton("fist", "en", 1).correct(root).getDistance());
     	
-    	assertEquals("first", new Automaton("fitst", 1).correct(root).getToken());
-    	assertEquals(1, new Automaton("fist", 1).correct(root).getDistance());
+    	assertEquals("first", new Automaton("fitst", "en", 1).correct(root).getToken());
+    	assertEquals(1, new Automaton("fist", "en", 1).correct(root).getDistance());
     	
-    	assertEquals("second", new Automaton("secnod", 1).correct(root).getToken());
-    	assertEquals(1, new Automaton("secnod", 1).correct(root).getDistance());
+    	assertEquals("second", new Automaton("secnod", "en", 1).correct(root).getToken());
+    	assertEquals(1, new Automaton("secnod", "en", 1).correct(root).getDistance());
     	
-    	assertEquals("second", new Automaton("secnd", 2).correct(root).getToken());
-    	assertEquals(2, new Automaton("secd", 2).correct(root).getDistance());
+    	assertEquals("second", new Automaton("secnd", "en", 2).correct(root).getToken());
+    	assertEquals(2, new Automaton("secd", "en", 2).correct(root).getDistance());
     }
     
     public void testCorrectFrequency() {
@@ -37,7 +37,7 @@ public class AutomatonTest extends TestCase {
     	root.insert("word 1", 1);
     	root.insert("word 2", 2);
     	
-    	assertEquals("word 2", new Automaton("word", 2).correct(root).getToken());
+    	assertEquals("word 2", new Automaton("word", "en", 2).correct(root).getToken());
     }
     
     public void testCorrectPrefixDistance() {
@@ -45,8 +45,8 @@ public class AutomatonTest extends TestCase {
     	root.insert("first", 1);
     	root.insert("second", 1);
     	
-    	assertEquals("first", new Automaton("fist", 2).correctPrefix(root).getToken());
-    	assertEquals("second", new Automaton("secnd", 2).correctPrefix(root).getToken());
+    	assertEquals("first", new Automaton("fist", "en", 2).correctPrefix(root).getToken());
+    	assertEquals("second", new Automaton("secnd", "en", 2).correctPrefix(root).getToken());
     }
     
     public void testCorrectPrefixFrequency() {
@@ -55,7 +55,7 @@ public class AutomatonTest extends TestCase {
     	root.insert("wonderful", 2);
     	root.insert("wondering", 3);
     	
-    	assertEquals("won", new Automaton("wont", 2).correctPrefix(root).getToken());
-    	assertEquals("wonder", new Automaton("wonderx", 2).correctPrefix(root).getToken());
+    	assertEquals("wond", new Automaton("wont", "en", 2).correctPrefix(root).getToken());
+    	assertEquals("wonder", new Automaton("wonderx", "en", 2).correctPrefix(root).getToken());
     }
 }

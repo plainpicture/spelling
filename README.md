@@ -2,8 +2,8 @@
 # Spelling
 
 Multi-language, Multi word, utf-8 spelling correction and suggestion server using a levenshtein automaton and a Trie.
-Written in java. Several optimizations like e.g. pruning the search trie via already found
-distances and frequencies provide single millisecond performance for single keyword corrections.
+Written in java. Using several optimizations like e.g. pruning the search trie via already found
+distances.
 
 Compiliation:
 
@@ -27,8 +27,9 @@ en  keyword 2 28929
 
 containing three columns per line. First column is an arbitrary locale (language identifier),
 the second column is the keyword or phrase and the third column is a frequency or score value.
-If there are multiple matches with the same distance, the one with a higher frequency wins.
-Phrases get better score (distance / number of words).
+If there are multiple matches with the same distance, higher phonetic similarity (de: Kölner Phonetik,
+en: Double Metaphone, fr: Custom) wins. Otherwise, the one with a higher frequency wins.
+Phrases generally get better score (distance / number of words).
 
 The server listens on TCP port 12182 and uses a simple JSON based protocol.
 
@@ -66,5 +67,5 @@ Currently, certain defaults apply:
 
 * tokens < 4 characters: won't be corrected
 * tokens = 4 characters: a maximum edit distance of 1 is used
-* tokens > 4 characters: a maximum edit distance of 2 is used
+* tokens > 5 characters: a maximum edit distance of 2 is used
 

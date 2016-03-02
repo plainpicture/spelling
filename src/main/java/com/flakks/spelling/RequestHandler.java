@@ -15,7 +15,7 @@ public class RequestHandler {
 	
 	public String process() {
 		JSONObject jsonRequest = new JSONObject(request);
-
+		
 		long time = System.currentTimeMillis();
 		String locale = jsonRequest.getString("locale");
 		String query = jsonRequest.getString("query").toLowerCase();
@@ -42,7 +42,7 @@ public class RequestHandler {
 					
 			return response.put("suggestions", jsonSuggestions).put("took", time).toString();
 		}
-		
+
 		return "{}";
 	}
 }
