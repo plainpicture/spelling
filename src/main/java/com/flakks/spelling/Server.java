@@ -39,7 +39,7 @@ public class Server {
 	ServerSocket serverSocket;
 
 	public void start() throws IOException {
-		serverSocket = new ServerSocket(12182, 1024);
+		serverSocket = new ServerSocket(12182, 1024, InetAddress.getByName("127.0.0.1"));
 		
 		while(true) {
 			new Connection(serverSocket.accept()).start();
