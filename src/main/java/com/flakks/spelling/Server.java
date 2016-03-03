@@ -19,8 +19,8 @@ class Connection extends Thread {
 	public void run() {
 		try {
 			try {
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+				OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream(), "UTF-8");
 				
 				writer.write(new RequestHandler(bufferedReader.readLine()).process());
 				writer.write("\n");
