@@ -43,12 +43,12 @@ public class App {
 				rootNode = new TrieNode();
 				rootNodes.put(entry.getKey(), rootNode);
 			}
-			
+
 			for(Map.Entry<String, Integer> dictionaryEntry : entry.getValue().entrySet()) {
 				rootNode.insert(dictionaryEntry.getKey(), dictionaryEntry.getValue());
 			}
 		}
-		
+
 		return rootNodes;
 	}
 	

@@ -29,7 +29,6 @@ class Connection extends Thread {
 				socket.close();
 			}
 		} catch(IOException e) {
-			System.out.println(e);
 			e.printStackTrace();
 		}
 	}
