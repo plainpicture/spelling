@@ -52,7 +52,7 @@ public class App {
 		return rootNodes;
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		List<String> lines = new ArrayList<String>();
 		
 		for(int i = 0; i < args.length; i++)
@@ -61,6 +61,6 @@ public class App {
 		dictionaries = createDictionaries(lines);
 		trieNodes = createTrieNodes(dictionaries);
 		
-		new Server().start();
+		new HttpServer().start();
 	}
 }

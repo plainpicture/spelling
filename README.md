@@ -31,36 +31,41 @@ If there are multiple matches with the same distance, higher phonetic similarity
 en: Double Metaphone, fr: Custom) wins. Otherwise, the one with a higher frequency wins.
 Phrases generally get better score (distance / number of words).
 
-The server listens on TCP port 12182 and uses a simple JSON based protocol.
+The server listens on port 8888 and uses a simple JSON based protocol.
 
 ## Correction
 
 Request:
 
-```json
-{"operation":"correct","query":"keywrd x","locale":"en"}\n
-```
+curl -X GET http://127.0.0.1:8888/correct?locale=en&query=keywrd+x
 
 Response:
 
 ```json
-{"query":"keyword 1","distance":2,"took":6}\n
+{
+  "query": "keyword 1",
+  "distance": 2,
+  "took": 6
+}
 ```
 
 `took` tells you how long the response took.
 
 ## Suggestion
 
-Request:
-
-```json
-{"operation":"suggest","query":"kyeword sn","locale":"en"}\n
-```
+curl -X GET http://127.0.0.1:8888/suggest?locale=en&query=kyeword+sn
 
 Response:
 
 ```json
-{"took":4,"suggestions":[{"query":"keyword snow","frequency":2919},{"query":"keyword snowfall","frequency":2140},"..."]"}\n
+{
+  "took": 4,
+  "suggestions": [
+    { "query": "keyword snow", "frequency": 2919 },
+    { "query": "keyword snowfall", "frequency":2140},
+    "..."
+  ]
+}
 ```
 
 Currently, certain defaults apply:
