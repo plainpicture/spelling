@@ -13,7 +13,8 @@ public class HttpServer {
         ServletContextHandler context = new ServletContextHandler();
         context.setContextPath("/");
         server.setHandler(context);
-        
+
+        context.addServlet(new ServletHolder(new InfoServlet()), "/info");
         context.addServlet(new ServletHolder(new CorrectServlet()), "/correct");
         context.addServlet(new ServletHolder(new SuggestServlet()), "/suggest");
 
